@@ -1,0 +1,342 @@
+{
+  "mango": {
+    "w": 297,
+    "h": 418,
+    "src": "tropical_fruits_set_01_asset.webp"
+  },
+  "pineapple": {
+    "w": 330,
+    "h": 519,
+    "src": "tropical_fruits_set_01_asset.webp"
+  },
+  "coconut": {
+    "w": 332,
+    "h": 347,
+    "src": "tropical_fruits_set_01_asset.webp"
+  },
+  "papaya": {
+    "w": 306,
+    "h": 484,
+    "src": "tropical_fruits_set_01_asset.webp"
+  },
+  "banana": {
+    "w": 295,
+    "h": 586,
+    "src": "tropical_fruits_set_02_asset.webp"
+  },
+  "lime": {
+    "w": 326,
+    "h": 333,
+    "src": "tropical_fruits_set_02_asset.webp"
+  },
+  "orange": {
+    "w": 329,
+    "h": 510,
+    "src": "tropical_fruits_set_02_asset.webp"
+  },
+  "passion_fruit": {
+    "w": 337,
+    "h": 341,
+    "src": "tropical_fruits_set_02_asset.webp"
+  },
+  "golden_mango": {
+    "w": 279,
+    "h": 439,
+    "src": "golden_fruits_set_01_asset.webp"
+  },
+  "golden_pineapple": {
+    "w": 296,
+    "h": 524,
+    "src": "golden_fruits_set_01_asset.webp"
+  },
+  "golden_coconut": {
+    "w": 315,
+    "h": 318,
+    "src": "golden_fruits_set_01_asset.webp"
+  },
+  "golden_papaya": {
+    "w": 276,
+    "h": 471,
+    "src": "golden_fruits_set_01_asset.webp"
+  },
+  "golden_banana": {
+    "w": 291,
+    "h": 517,
+    "src": "golden_fruits_set_02_asset.webp"
+  },
+  "golden_lime": {
+    "w": 331,
+    "h": 342,
+    "src": "golden_fruits_set_02_asset.webp"
+  },
+  "golden_orange": {
+    "w": 353,
+    "h": 329,
+    "src": "golden_fruits_set_02_asset.webp"
+  },
+  "golden_passion_fruit": {
+    "w": 328,
+    "h": 330,
+    "src": "golden_fruits_set_02_asset.webp"
+  },
+  "tree_mango": {
+    "w": 376,
+    "h": 378,
+    "src": "fruit_trees_set_01_asset.webp"
+  },
+  "tree_pineapple": {
+    "w": 364,
+    "h": 377,
+    "src": "fruit_trees_set_01_asset.webp"
+  },
+  "tree_coconut": {
+    "w": 381,
+    "h": 387,
+    "src": "fruit_trees_set_01_asset.webp"
+  },
+  "tree_papaya": {
+    "w": 372,
+    "h": 385,
+    "src": "fruit_trees_set_01_asset.webp"
+  },
+  "tree_banana": {
+    "w": 345,
+    "h": 351,
+    "src": "fruit_trees_set_02_asset.webp"
+  },
+  "tree_lime": {
+    "w": 341,
+    "h": 349,
+    "src": "fruit_trees_set_02_asset.webp"
+  },
+  "tree_orange": {
+    "w": 370,
+    "h": 358,
+    "src": "fruit_trees_set_02_asset.webp"
+  },
+  "tree_passion": {
+    "w": 359,
+    "h": 380,
+    "src": "fruit_trees_set_02_asset.webp"
+  },
+  "palm_01": {
+    "w": 373,
+    "h": 380,
+    "src": "palm_trees_set_asset.webp"
+  },
+  "palm_02": {
+    "w": 357,
+    "h": 345,
+    "src": "palm_trees_set_asset.webp"
+  },
+  "palm_03": {
+    "w": 361,
+    "h": 380,
+    "src": "palm_trees_set_asset.webp"
+  },
+  "palm_04": {
+    "w": 356,
+    "h": 327,
+    "src": "palm_trees_set_asset.webp"
+  },
+  "bush_01": {
+    "w": 377,
+    "h": 377,
+    "src": "tropical_bushes_set_asset.webp"
+  },
+  "bush_02": {
+    "w": 372,
+    "h": 388,
+    "src": "tropical_bushes_set_asset.webp"
+  },
+  "bush_03": {
+    "w": 372,
+    "h": 406,
+    "src": "tropical_bushes_set_asset.webp"
+  },
+  "bush_04": {
+    "w": 373,
+    "h": 369,
+    "src": "tropical_bushes_set_asset.webp"
+  },
+  "plant_01": {
+    "w": 364,
+    "h": 419,
+    "src": "decorative_tropical_plants_set_asset.webp"
+  },
+  "plant_02": {
+    "w": 370,
+    "h": 373,
+    "src": "decorative_tropical_plants_set_asset.webp"
+  },
+  "plant_03": {
+    "w": 376,
+    "h": 389,
+    "src": "decorative_tropical_plants_set_asset.webp"
+  },
+  "plant_04": {
+    "w": 376,
+    "h": 374,
+    "src": "decorative_tropical_plants_set_asset.webp"
+  },
+  "stone_01": {
+    "w": 318,
+    "h": 542,
+    "src": "tropical_stones_set_asset.webp"
+  },
+  "stone_02": {
+    "w": 300,
+    "h": 551,
+    "src": "tropical_stones_set_asset.webp"
+  },
+  "stone_03": {
+    "w": 343,
+    "h": 530,
+    "src": "tropical_stones_set_asset.webp"
+  },
+  "stone_04": {
+    "w": 341,
+    "h": 458,
+    "src": "tropical_stones_set_asset.webp"
+  },
+  "structure_01": {
+    "w": 352,
+    "h": 455,
+    "src": "garden_structures_set_asset.webp"
+  },
+  "structure_02": {
+    "w": 348,
+    "h": 401,
+    "src": "garden_structures_set_asset.webp"
+  },
+  "structure_03": {
+    "w": 343,
+    "h": 444,
+    "src": "garden_structures_set_asset.webp"
+  },
+  "structure_04": {
+    "w": 354,
+    "h": 412,
+    "src": "garden_structures_set_asset.webp"
+  },
+  "drone": {
+    "w": 644,
+    "h": 815,
+    "src": "garden_weather_drone_asset.webp"
+  },
+  "weather_beacon": {
+    "w": 757,
+    "h": 1097,
+    "src": "weather_beacon_asset.webp"
+  },
+  "unloading_station": {
+    "w": 665,
+    "h": 969,
+    "src": "harvest_unloading_station_asset.webp"
+  },
+  "harvest_chest": {
+    "w": 768,
+    "h": 1376,
+    "src": "harvest_chest_asset.webp"
+  },
+  "coin": {
+    "w": 732,
+    "h": 748,
+    "src": "coin_asset.webp"
+  },
+  "large_gold_coin": {
+    "w": 765,
+    "h": 806,
+    "src": "large_gold_coin_asset.webp"
+  },
+  "harvest_crystal": {
+    "w": 547,
+    "h": 1352,
+    "src": "rare_harvest_crystal_asset.webp"
+  },
+  "gift_box": {
+    "w": 631,
+    "h": 702,
+    "src": "tropical_gift_box_asset.webp"
+  },
+  "grass": {
+    "w": 768,
+    "h": 1376,
+    "src": "tropical_grass_asset.webp"
+  },
+  "soil": {
+    "w": 768,
+    "h": 1376,
+    "src": "tropical_soil_asset.webp"
+  },
+  "cloud_01": {
+    "w": 480,
+    "h": 268,
+    "src": "clouds_set_asset.webp"
+  },
+  "cloud_02": {
+    "w": 387,
+    "h": 315,
+    "src": "clouds_set_asset.webp"
+  },
+  "cloud_03": {
+    "w": 502,
+    "h": 240,
+    "src": "clouds_set_asset.webp"
+  },
+  "cloud_04": {
+    "w": 379,
+    "h": 345,
+    "src": "clouds_set_asset.webp"
+  },
+  "lightning_01": {
+    "w": 139,
+    "h": 1151,
+    "src": "lightning_bolts_set_asset.webp"
+  },
+  "lightning_02": {
+    "w": 144,
+    "h": 1153,
+    "src": "lightning_bolts_set_asset.webp"
+  },
+  "lightning_03": {
+    "w": 133,
+    "h": 1147,
+    "src": "lightning_bolts_set_asset.webp"
+  },
+  "lightning_04": {
+    "w": 180,
+    "h": 998,
+    "src": "lightning_bolts_set_asset.webp"
+  },
+  "effect_sunburst": {
+    "w": 191,
+    "h": 262,
+    "src": "weather_effects_set_asset.webp"
+  },
+  "effect_wind": {
+    "w": 255,
+    "h": 395,
+    "src": "weather_effects_set_asset.webp"
+  },
+  "effect_rain_or_storm": {
+    "w": 270,
+    "h": 426,
+    "src": "weather_effects_set_asset.webp"
+  },
+  "pond_01": {
+    "w": 569,
+    "h": 394,
+    "src": "small_ponds_set_asset.webp"
+  },
+  "pond_02": {
+    "w": 467,
+    "h": 429,
+    "src": "small_ponds_set_asset.webp"
+  },
+  "pond_03": {
+    "w": 591,
+    "h": 419,
+    "src": "small_ponds_set_asset.webp"
+  }
+}

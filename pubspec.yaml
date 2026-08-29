@@ -1,0 +1,41 @@
+name: juicytropicgame
+description: Juicy Tropic — weather-driven tropical harvest arcade.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.5.3
+  audioplayers: ^6.5.1
+  path_provider: ^2.1.5
+  webview_flutter: ^4.13.0
+  http: ^1.5.0
+  flutter_animate: ^4.5.2
+  lucide_icons_flutter: ^3.1.17
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/Sora.ttf
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope.ttf
+  assets:
+    - assets/Juicy_Tropic_additional_assets/Vertical_Loading_Screen.webp
+    - assets/Juicy_Tropic_additional_assets/Horizontal_Loading_Screen.webp
+    - assets/Juicy_Tropic_additional_assets/Game_Name.webp
+    - assets/Juicy_Tropic_additional_assets/Icon.png
+    - assets/sprites/
+    - assets/Juicy_Tropic_sounds_assets/
+    - assets/legal/
