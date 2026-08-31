@@ -1,7 +1,7 @@
 name: juicytropicgame
 description: Juicy Tropic — weather-driven tropical harvest arcade.
 publish_to: "none"
-version: 1.0.0+1
+version: 1.0.1+3
 
 environment:
   sdk: ^3.12.2
@@ -13,14 +13,36 @@ dependencies:
   shared_preferences: ^2.5.3
   audioplayers: ^6.5.1
   path_provider: ^2.1.5
-  webview_flutter: ^4.13.0
+  webview_flutter: ^4.13.1
+  webview_flutter_android: ^4.12.1
   http: ^1.5.0
   flutter_animate: ^4.5.2
   lucide_icons_flutter: ^3.1.17
+  connectivity_plus: ^6.1.5
+  appsflyer_sdk: ^6.17.1
+  firebase_core: ^4.10.0
+  firebase_messaging: ^16.2.1
+  firebase_app_check: ^0.4.3
+  flutter_local_notifications: ^22.1.1
+  flutter_secure_storage: ^9.2.4
+  device_info_plus: 11.3.3
+  url_launcher: ^6.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  image: ^4.8.0
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/generated/app_icon.png"
+  adaptive_icon_background: "assets/generated/app_icon_background.png"
+  adaptive_icon_foreground: "assets/generated/app_icon_foreground.png"
+  adaptive_icon_foreground_inset: 0
+  min_sdk_android: 30
 
 flutter:
   uses-material-design: true
@@ -32,10 +54,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Manrope.ttf
   assets:
-    - assets/Juicy_Tropic_additional_assets/Vertical_Loading_Screen.webp
-    - assets/Juicy_Tropic_additional_assets/Horizontal_Loading_Screen.webp
-    - assets/Juicy_Tropic_additional_assets/Game_Name.webp
-    - assets/Juicy_Tropic_additional_assets/Icon.png
+    - assets/orchard_dusk_pack/
     - assets/sprites/
     - assets/Juicy_Tropic_sounds_assets/
     - assets/legal/

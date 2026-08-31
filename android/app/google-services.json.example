@@ -1,0 +1,20 @@
+{
+  "_comment": "Place the real google-services.json next to this file. package_name must be com.juicytropic.juicytropicgame.",
+  "project_info": {
+    "project_number": "REPLACE_ME",
+    "project_id": "REPLACE_ME",
+    "storage_bucket": "REPLACE_ME.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "android_client_info": {
+          "package_name": "com.juicytropic.juicytropicgame"
+        }
+      },
+      "api_key": [{ "current_key": "REPLACE_ME" }]
+    }
+  ],
+  "configuration_version": "1"
+}

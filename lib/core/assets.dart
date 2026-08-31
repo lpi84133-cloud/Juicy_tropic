@@ -1,13 +1,18 @@
 class AppAssets {
   AppAssets._();
 
-  static const loadingPortrait =
-      'assets/Juicy_Tropic_additional_assets/Vertical_Loading_Screen.webp';
-  static const loadingLandscape =
-      'assets/Juicy_Tropic_additional_assets/Horizontal_Loading_Screen.webp';
-  static const gameName =
-      'assets/Juicy_Tropic_additional_assets/Game_Name.webp';
-  static const icon = 'assets/Juicy_Tropic_additional_assets/Icon.png';
+  static const String _shell = 'assets/orchard_dusk_pack';
+
+  static const loadingPortrait = '$_shell/Vertical_Loading_Screen.webp';
+  static const loadingLandscape = '$_shell/Horizontal_Loading_Screen.webp';
+  static const verticalNoWifi = '$_shell/Vertical_Nowifi_Screen.webp';
+  static const horizontalNoWifi = '$_shell/Horizontal_Nowifi_Screen.webp';
+  static const verticalNotifications =
+      '$_shell/Vertical_Notifications_Screen.webp';
+  static const horizontalNotifications =
+      '$_shell/Horizontal_Notifications_Screen.webp';
+  static const gameName = '$_shell/Game_Name.webp';
+  static const icon = '$_shell/Icon.png';
 
   static const privacyHtml = 'assets/legal/privacy_policy.html';
   static const supportHtml = 'assets/legal/support.html';
@@ -99,6 +104,10 @@ class AppAssets {
   static List<String> get preloadImages => [
         loadingPortrait,
         loadingLandscape,
+        verticalNoWifi,
+        horizontalNoWifi,
+        verticalNotifications,
+        horizontalNotifications,
         gameName,
         icon,
         grass,
