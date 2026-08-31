@@ -15,7 +15,10 @@ class MainActivity : FlutterActivity() {
     private var away: MethodChannel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        parkFrom(intent)
+        if (savedInstanceState == null) {
+            parkFrom(intent, fromNewIntent = false)
+        }
+        neutralizeIntent()
         super.onCreate(savedInstanceState)
     }
 
@@ -31,25 +34,59 @@ class MainActivity : FlutterActivity() {
                 }
             }
         away = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, awayName)
-        parkFrom(intent)?.let { href ->
+        parkFrom(intent, fromNewIntent = false)?.let { href ->
             away?.invokeMethod("awayTap", href)
         }
+        neutralizeIntent()
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        parkFrom(intent)?.let { href ->
+        parkFrom(intent, fromNewIntent = true)?.let { href ->
             away?.invokeMethod("awayTap", href)
         }
+        neutralizeIntent()
     }
 
-    private fun parkFrom(intent: Intent?): String? {
+    private fun neutralizeIntent() {
+        val clean = Intent(this, MainActivity::class.java)
+        clean.action = Intent.ACTION_MAIN
+        clean.addCategory(Intent.CATEGORY_LAUNCHER)
+        setIntent(clean)
+    }
+
+    private fun parkFrom(intent: Intent?, fromNewIntent: Boolean): String? {
         val href = hrefIn(intent) ?: return null
-        getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE)
-            .edit()
+        val mid = intent?.getStringExtra("google.message_id")
+            ?: intent?.getStringExtra("message_id")
+        val sent = intent?.hasExtra("google.sent_time") == true
+        val view = intent?.action == Intent.ACTION_VIEW
+        if (!fromNewIntent && mid == null && !sent && !view) {
+            return null
+        }
+
+        val prefs = getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE)
+        if (!fromNewIntent && mid != null &&
+            prefs.getString("flutter.px_seen_mid", null) == mid
+        ) {
+            return null
+        }
+        if (!fromNewIntent &&
+            prefs.getString("flutter.px_tap_href", null) == href
+        ) {
+            return null
+        }
+
+        val edit = prefs.edit()
             .putString("flutter.px_park", href)
-            .apply()
+            .putString("flutter.px_tap_href", href)
+            .putBoolean("flutter.px_live_tap", true)
+            .putLong("flutter.px_live_tap_at", System.currentTimeMillis())
+        if (mid != null) {
+            edit.putString("flutter.px_seen_mid", mid)
+        }
+        edit.commit()
         return href
     }
 

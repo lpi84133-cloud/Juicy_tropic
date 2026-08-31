@@ -3,16 +3,14 @@ class AppAssets {
 
   static const String _shell = 'assets/orchard_dusk_pack';
 
-  static const loadingPortrait = '$_shell/Vertical_Loading_Screen.webp';
-  static const loadingLandscape = '$_shell/Horizontal_Loading_Screen.webp';
-  static const verticalNoWifi = '$_shell/Vertical_Nowifi_Screen.webp';
-  static const horizontalNoWifi = '$_shell/Horizontal_Nowifi_Screen.webp';
-  static const verticalNotifications =
-      '$_shell/Vertical_Notifications_Screen.webp';
-  static const horizontalNotifications =
-      '$_shell/Horizontal_Notifications_Screen.webp';
-  static const gameName = '$_shell/Game_Name.webp';
-  static const icon = '$_shell/Icon.png';
+  static const loadingPortrait = '$_shell/rind_dawn_port.webp';
+  static const loadingLandscape = '$_shell/rind_dawn_land.webp';
+  static const verticalNoWifi = '$_shell/rind_parch_port.webp';
+  static const horizontalNoWifi = '$_shell/rind_parch_land.webp';
+  static const verticalNotifications = '$_shell/rind_chime_port.webp';
+  static const horizontalNotifications = '$_shell/rind_chime_land.webp';
+  static const gameName = '$_shell/rind_wordmark.webp';
+  static const icon = '$_shell/rind_mark.png';
 
   static const privacyHtml = 'assets/legal/privacy_policy.html';
   static const supportHtml = 'assets/legal/support.html';

@@ -565,13 +565,22 @@ class ScreenShell extends StatelessWidget {
   }
 }
 
+Widget keepProgress(BuildContext context, Widget page) {
+  final ProgressScope? scope =
+      context.getInheritedWidgetOfExactType<ProgressScope>();
+  final ProgressStore? store = scope?.notifier;
+  if (store == null) return page;
+  return ProgressScope(store: store, child: page);
+}
+
 /// Shared soft page transition so navigation feels consistent everywhere.
 Future<T?> pushPage<T>(BuildContext context, Widget page, {bool replace = false}) {
   AudioService.instance.open();
+  final Widget wrapped = keepProgress(context, page);
   final route = PageRouteBuilder<T>(
     transitionDuration: const Duration(milliseconds: 320),
     reverseTransitionDuration: const Duration(milliseconds: 240),
-    pageBuilder: (_, _, _) => page,
+    pageBuilder: (_, _, _) => wrapped,
     transitionsBuilder: (_, anim, _, child) {
       final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
       return FadeTransition(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -27,6 +28,9 @@ class FruitBell {
   FirebaseMessaging? _fm;
   String? _token;
   bool _ready = false;
+  StreamSubscription<RemoteMessage>? _frontSub;
+  final Set<String> _seenPush = <String>{};
+  bool liveTap = false;
 
   void Function(String link)? onLink;
   void Function(String token)? onTokenRotated;
@@ -45,34 +49,55 @@ class FruitBell {
       const MethodChannel('orchard/away').setMethodCallHandler(
         (MethodCall call) async {
           if (call.method == 'awayTap') {
-            deliver(call.arguments?.toString() ?? '');
+            if (_cache.takeLiveTap()) liveTap = true;
+            if (liveTap) {
+              deliver(call.arguments?.toString() ?? '');
+            }
           }
         },
       );
 
       await _prepLocal();
 
+      // Native (MainActivity.parkFrom) already stashed the href into
+      // px_park and set px_live_tap=true (with a timestamp) using
+      // SharedPreferences.commit(). Trust that as the sole source of
+      // truth so a killed-before-flush Dart apply() can never leak an
+      // old flag into a plain icon relaunch.
+      if (_cache.takeLiveTap()) {
+        liveTap = true;
+      }
+
+      // Local notification cold tap: only possible if the OS launched us
+      // with those extras. Icon relaunch returns null here.
       final NotificationAppLaunchDetails? launched =
           await _local.getNotificationAppLaunchDetails();
       if (launched?.didNotificationLaunchApp == true) {
         final String? raw = launched!.notificationResponse?.payload;
         if (raw != null && raw.isNotEmpty) {
           try {
-            deliver(
-              pickHref(jsonDecode(raw) as Map<String, dynamic>) ?? '',
-            );
+            final String href =
+                pickHref(jsonDecode(raw) as Map<String, dynamic>) ?? '';
+            if (href.isNotEmpty) {
+              liveTap = true;
+              await _cache.stashPending(href);
+            }
           } catch (_) {}
         }
       }
 
-      final RemoteMessage? initial = await _fm!.getInitialMessage().timeout(
+      // Consume FCM's cold-start message so it does not fire again.
+      // The href is already parked by native, no need to stash here.
+      await _fm!.getInitialMessage().timeout(
         const Duration(seconds: 6),
         onTimeout: () => null,
       );
-      if (initial != null) _onCold(initial);
 
-      FirebaseMessaging.onMessage.listen(_onFront);
-      FirebaseMessaging.onMessageOpenedApp.listen(_onWarm);
+      _frontSub ??= FirebaseMessaging.onMessage.listen(_onFront);
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        liveTap = true;
+        _onWarm(message);
+      });
       _fm!.onTokenRefresh.listen((String t) {
         _token = t;
         onTokenRotated?.call(t);
@@ -160,6 +185,16 @@ class FruitBell {
     final RemoteNotification? n = message.notification;
     if (n == null || !Platform.isAndroid) return;
 
+    final String mark = message.messageId ??
+        '${n.title}|${n.body}|${message.sentTime?.millisecondsSinceEpoch}';
+    if (!_seenPush.add(mark)) return;
+    if (_seenPush.length > 32) {
+      _seenPush.remove(_seenPush.first);
+    }
+
+    final String? tag = message.messageId;
+    final int trayId = (tag ?? mark).hashCode & 0x7fffffff;
+
     AndroidNotificationDetails? details;
     final String? imageUrl = n.android?.imageUrl;
     if (imageUrl != null && imageUrl.isNotEmpty) {
@@ -171,6 +206,7 @@ class FruitBell {
           importance: Importance.high,
           priority: Priority.high,
           icon: _tinyIcon,
+          tag: tag,
           styleInformation: BigPictureStyleInformation(
             ByteArrayAndroidBitmap(bytes),
             largeIcon:
@@ -180,16 +216,17 @@ class FruitBell {
       }
     }
 
-    details ??= const AndroidNotificationDetails(
+    details ??= AndroidNotificationDetails(
       kChimeId,
       kChimeTitle,
       importance: Importance.high,
       priority: Priority.high,
       icon: _tinyIcon,
+      tag: tag,
     );
 
     await _local.show(
-      id: n.hashCode,
+      id: trayId,
       title: n.title,
       body: n.body,
       notificationDetails: NotificationDetails(android: details),
@@ -208,10 +245,6 @@ class FruitBell {
     } else {
       _cache.stashPending(link);
     }
-  }
-
-  void _onCold(RemoteMessage message) {
-    deliver(pickHref(message.data) ?? '');
   }
 
   void _onWarm(RemoteMessage message) {

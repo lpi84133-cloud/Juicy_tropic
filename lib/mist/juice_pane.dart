@@ -58,22 +58,40 @@ class _JuicePaneState extends State<JuicePane> with WidgetsBindingObserver {
     widget.bell.onLink = (String link) {
       if (mounted) _openPane(link);
     };
-    WidgetsBinding.instance.addPostFrameCallback((_) => _drainOnce());
+    if (widget.fromPush) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _drainOnce());
+    }
 
     _sub = widget.dew.changes.listen((List<ConnectivityResult> r) async {
       final bool allNone = r.isNotEmpty &&
           r.every((ConnectivityResult e) => e == ConnectivityResult.none);
-      if (!allNone && await widget.dew.isReachable()) {
+      if (!allNone || await widget.dew.hasAdapter()) {
         _dryHold?.cancel();
         return;
       }
       _dryHold?.cancel();
-      _dryHold = Timer(const Duration(milliseconds: 700), _openDry);
+      _dryHold = Timer(const Duration(milliseconds: 900), () async {
+        if (!await widget.dew.hasAdapter()) _openDry();
+      });
+    });
+
+    SystemChrome.setSystemUIChangeCallback((bool visible) async {
+      if (!visible || !mounted) return;
+      await Future<void>.delayed(const Duration(milliseconds: 1600));
+      if (mounted) _immerse();
     });
   }
 
   void _immerse() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersiveSticky,
+      overlays: const <SystemUiOverlay>[],
+    );
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarContrastEnforced: false,
+    ));
   }
 
   @override
@@ -123,6 +141,11 @@ class _JuicePaneState extends State<JuicePane> with WidgetsBindingObserver {
               err.errorCode == -106 ||
               err.errorCode == -21;
           if (dns) {
+            if (_loopTries < 1 && _lastFrame != null) {
+              _loopTries++;
+              _web.loadRequest(Uri.parse(_lastFrame!));
+              return;
+            }
             _openDry();
           } else {
             _probeDry();
@@ -167,6 +190,7 @@ class _JuicePaneState extends State<JuicePane> with WidgetsBindingObserver {
 
   Future<void> _drainOnce() async {
     final String? queued = await widget.cache.takePending();
+    await widget.cache.stashPending(null);
     if (!mounted || queued == null) return;
     _openPane(queued);
   }
@@ -259,7 +283,7 @@ class _JuicePaneState extends State<JuicePane> with WidgetsBindingObserver {
   void _liftFields() {
     _web.runJavaScript(r'''
 (function(){
-  if (window.__jxKbShim) return; window.__jxKbShim = true;
+  if (window.__groveLiftOn) return; window.__groveLiftOn = true;
   function field(el){return el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA'||el.isContentEditable);}
   function lift(){
     var el=document.activeElement; if(!field(el))return;
@@ -283,7 +307,7 @@ class _JuicePaneState extends State<JuicePane> with WidgetsBindingObserver {
   void _patchRim() {
     _web.runJavaScript(r'''
 (function(){
-  if(window.__jxRimPatch) return; window.__jxRimPatch=true;
+  if(window.__groveRimOn) return; window.__groveRimOn=true;
   var ID='jx-rim-sheet';
   var CSS=':root{--safe-area-inset-top:0px!important;--safe-area-inset-right:0px!important;'
     +'--safe-area-inset-bottom:0px!important;--safe-area-inset-left:0px!important;'
@@ -325,10 +349,7 @@ class _JuicePaneState extends State<JuicePane> with WidgetsBindingObserver {
     _dryHold?.cancel();
     _sub?.cancel();
     widget.bell.onLink = null;
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: SystemUiOverlay.values,
-    );
+    SystemChrome.setSystemUIChangeCallback(null);
     super.dispose();
   }
 

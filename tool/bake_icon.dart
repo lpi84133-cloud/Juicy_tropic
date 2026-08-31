@@ -49,10 +49,10 @@ void main() {
   img.compositeImage(plate, inset, dstX: origin, dstY: origin);
 
   final Directory out = Directory('assets/generated')..createSync(recursive: true);
-  File('${out.path}/app_icon.png').writeAsBytesSync(img.encodePng(square));
-  File('${out.path}/app_icon_background.png')
+  File('${out.path}/rind_plate.png').writeAsBytesSync(img.encodePng(square));
+  File('${out.path}/rind_plate_back.png')
       .writeAsBytesSync(img.encodePng(backdrop));
-  File('${out.path}/app_icon_foreground.png')
+  File('${out.path}/rind_plate_fore.png')
       .writeAsBytesSync(img.encodePng(plate));
 
   print('Wrote adaptive layers ($artSize px art on $canvas px / 72dp of 108dp)');

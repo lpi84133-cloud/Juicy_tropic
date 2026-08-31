@@ -60,4 +60,13 @@ void main() {
   emit('webkitVersion', webkitVersion);
   emit('attributionKey', attributionKey);
   emit('messagingProject', messagingProject);
+  emit('uaHead', 'Mozilla/5.0');
+  emit('uaLinux', 'Linux; Android');
+  emit('uaKit', 'AppleWebKit');
+  emit('uaGecko', 'KHTML, like Gecko');
+  emit('uaChrome', 'Chrome/');
+  emit('uaSafari', 'Mobile Safari/');
+  emit('uaIos', 'iPhone; CPU iPhone OS');
+  emit('uaMac', 'like Mac OS X');
+  emit('uaIosTail', 'Mobile/15E148 Safari/');
 }

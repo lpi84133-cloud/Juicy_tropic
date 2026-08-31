@@ -17,9 +17,9 @@ import '../mist/rustle_invite.dart';
 import '../sap/dawn_pick.dart';
 import '../sap/harvest_lane.dart';
 import '../services/bootstrap_service.dart';
-import '../widgets/ui.dart';
 import '../screens/home_screen.dart';
 import 'dawn_steer.dart';
+import 'orchard_root.dart';
 import 'prime_shell.dart';
 
 class DawnGuide extends StatefulWidget {
@@ -140,12 +140,10 @@ class _DawnGuideState extends State<DawnGuide> with TickerProviderStateMixin {
     if (_routed || !mounted) return;
     _routed = true;
     _drip?.cancel();
+    OrchardRoot.attachStore(session.store);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
-        builder: (_) => ProgressScope(
-          store: session.store,
-          child: const HomeScreen(),
-        ),
+        builder: (_) => const HomeScreen(),
       ),
     );
   }

@@ -38,9 +38,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/generated/app_icon.png"
-  adaptive_icon_background: "assets/generated/app_icon_background.png"
-  adaptive_icon_foreground: "assets/generated/app_icon_foreground.png"
+  image_path: "assets/generated/rind_plate.png"
+  adaptive_icon_background: "assets/generated/rind_plate_back.png"
+  adaptive_icon_foreground: "assets/generated/rind_plate_fore.png"
   adaptive_icon_foreground_inset: 0
   min_sdk_android: 30
 

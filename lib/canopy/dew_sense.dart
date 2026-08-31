@@ -31,7 +31,7 @@ class DewSense {
 
   Future<bool> isReachable() async {
     if (!await hasAdapter()) return false;
-    const List<String> hosts = <String>['cloudflare.com', 'one.one.one.one'];
+    const List<String> hosts = <String>['dns.google', 'quad9.net'];
     for (final String host in hosts) {
       try {
         final List<InternetAddress> probe = await InternetAddress.lookup(host)

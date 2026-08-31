@@ -60,11 +60,7 @@ class GroveMark {
     return true;
   }
 
-  static bool gateHrefAllowed(String? raw) {
-    if (!isWebLink(raw)) return false;
-    final String host = Uri.parse(raw!.trim()).host.toLowerCase();
-    return gateHosts.any(
-      (String suffix) => host == suffix || host.endsWith('.$suffix'),
-    );
-  }
+  /// Gate already answered ok — any real http(s) landing is fine.
+  /// OneLink stays blocked inside [isWebLink].
+  static bool gateHrefAllowed(String? raw) => isWebLink(raw);
 }

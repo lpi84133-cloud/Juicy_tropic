@@ -340,11 +340,12 @@ class _TextLink extends StatelessWidget {
 
 void _push(BuildContext context, Widget page) {
   AudioService.instance.open();
+  final Widget wrapped = keepProgress(context, page);
   Navigator.of(context).push(
     PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 320),
       reverseTransitionDuration: const Duration(milliseconds: 240),
-      pageBuilder: (_, _, _) => page,
+      pageBuilder: (_, _, _) => wrapped,
       transitionsBuilder: (_, anim, _, child) {
         final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
         return FadeTransition(

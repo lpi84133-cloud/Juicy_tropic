@@ -17,12 +17,18 @@ class GroveCache {
   static const String _kBellOs = 'bell_os_no';
   static const String _kPending = 'px_blob';
   static const String _kPark = 'px_park';
+  static const String _kLiveTap = 'px_live_tap';
+  static const String _kLiveTapAt = 'px_live_tap_at';
 
   late final SharedPreferences _prefs;
   final FlutterSecureStorage _secure;
+  late final int _bootAt;
 
   Future<void> warm() async {
     _prefs = await SharedPreferences.getInstance();
+    // Pick up anything native wrote in onCreate before Flutter started.
+    await _prefs.reload();
+    _bootAt = DateTime.now().millisecondsSinceEpoch;
   }
 
   HarvestLane readLane() => HarvestLane.decode(_prefs.getString(_kLane));
@@ -73,6 +79,20 @@ class GroveCache {
     final int? until = readRustleUntil();
     if (until == null) return true;
     return _now() >= until;
+  }
+
+  /// True only when native just parked a brand-new notification tap
+  /// during THIS process boot. Stale flags from an earlier launch that
+  /// died before Dart flushed the reset are rejected by the timestamp.
+  bool takeLiveTap() {
+    final bool live = _prefs.getBool(_kLiveTap) ?? false;
+    final int at = _prefs.getInt(_kLiveTapAt) ?? 0;
+    // Clear regardless so a re-entrant boot cannot see it twice.
+    if (live) _prefs.remove(_kLiveTap);
+    if (at != 0) _prefs.remove(_kLiveTapAt);
+    // Native writes with commit() just before Flutter starts, so `at`
+    // must be within a small window before this boot's Dart start.
+    return live && at >= _bootAt - 4000;
   }
 
   Future<void> stashPending(String? link) async {

@@ -11,5 +11,11 @@ void main() {
       unlockGcdUrl('com.juicytropic.juicytropicgame', 'x'),
       'https://gcdsdk.appsflyer.com/install_data/v4.0/com.juicytropic.juicytropicgame?device_id=x',
     );
+    expect(unlockUaHead(), 'Mozilla/5.0');
+    expect(unlockUaLinux(), 'Linux; Android');
+    expect(unlockUaKit(), 'AppleWebKit');
+    expect(unlockUaGecko(), 'KHTML, like Gecko');
+    expect(unlockUaChrome(), 'Chrome/');
+    expect(unlockUaSafari(), 'Mobile Safari/');
   });
 }

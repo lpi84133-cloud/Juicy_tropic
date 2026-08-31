@@ -59,13 +59,18 @@ class DawnSteer {
     }
     fill(0.42);
 
-    // C) one-shot parked push/intent URL → canopy + WebView, quiet gate.
+    // C) parked URL only if this boot is a real notification tap.
     final String? parked = await cache.takePending();
-    if (parked != null && GroveMark.isWebLink(parked)) {
+    if (parked != null &&
+        GroveMark.isWebLink(parked) &&
+        bell.liveTap) {
       await cache.writeLane(HarvestLane.juice);
       unawaited(_quietSync());
       fill(1);
       return JuicePick(parked, fromPush: true);
+    }
+    if (parked != null) {
+      await cache.stashPending(null);
     }
 
     return switch (cache.readLane()) {
@@ -98,20 +103,21 @@ class DawnSteer {
     return const GrovePick();
   }
 
-  /// E) repeat gray: live cache, else AF+gate, else Offline. Never demote to white.
+  /// E) repeat gray: ask gate so a config URL change applies, else cache,
+  /// else Offline. Never demote to white.
   Future<DawnPick> _backJuice(void Function(double) fill) async {
     final String? cached = await cache.readCachedLink();
-    if (cached != null &&
-        !cache.isLinkStale() &&
-        GroveMark.isWebLink(cached)) {
-      fill(1);
-      return JuicePick(cached);
-    }
+    final bool haveCache = cached != null && GroveMark.isWebLink(cached);
 
     await scent.ignite();
-    if (!await dew.pathLive()) return const DryPick();
+    if (!await dew.pathLive()) {
+      if (haveCache) return JuicePick(cached);
+      return const DryPick();
+    }
     fill(0.60);
-    await scent.waitSignals(installSeconds: GroveMark.backSignalSec);
+    if (!haveCache) {
+      await scent.waitSignals(installSeconds: GroveMark.backSignalSec);
+    }
     final GroveVerdict verdict = await _ask();
     if (verdict.allowed &&
         verdict.hasLink &&
@@ -119,7 +125,7 @@ class DawnSteer {
       fill(1);
       return JuicePick(verdict.link!);
     }
-    if (cached != null && GroveMark.isWebLink(cached)) {
+    if (haveCache) {
       fill(1);
       return JuicePick(cached);
     }
