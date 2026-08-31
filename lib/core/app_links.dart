@@ -5,10 +5,10 @@ class AppLinks {
   AppLinks._();
 
   /// Insert the Privacy Policy URL here when it is ready.
-  static const String? privacyPolicyUrl = null;
+  static const String? privacyPolicyUrl = 'https://juicytrropic.online/privacy-policy.html';
 
   /// Insert the Support URL here when it is ready.
-  static const String? supportUrl = null;
+  static const String? supportUrl = 'https://juicytrropic.online/support.html';
 
   static bool get hasPrivacyPolicy => _has(privacyPolicyUrl);
   static bool get hasSupport => _has(supportUrl);

@@ -15,8 +15,6 @@ class LegalScreen extends StatefulWidget {
 
 class _LegalScreenState extends State<LegalScreen> {
   WebViewController? _controller;
-  bool _loading = true;
-  String? _error;
 
   @override
   void initState() {
@@ -25,35 +23,17 @@ class _LegalScreenState extends State<LegalScreen> {
   }
 
   Future<void> _open() async {
-    try {
-      final doc = await LegalService.instance.load(widget.kind);
-      final controller = WebViewController()
-        ..setBackgroundColor(Colors.white)
-        ..setJavaScriptMode(JavaScriptMode.disabled)
-        ..setNavigationDelegate(
-          NavigationDelegate(
-            onPageFinished: (_) {
-              if (mounted) setState(() => _loading = false);
-            },
-            onWebResourceError: (_) async {
-              final fallback = await LegalService.instance.load(widget.kind);
-              await _controller?.loadHtmlString(fallback.html);
-            },
-          ),
-        );
-      await controller.loadHtmlString(doc.html);
-      if (!mounted) return;
-      setState(() {
-        _controller = controller;
-        _loading = false;
-      });
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _error = 'This page is unavailable right now.';
-        _loading = false;
-      });
-    }
+    final local = await LegalService.instance.loadLocal(widget.kind);
+    final controller = WebViewController()
+      ..setBackgroundColor(Colors.white)
+      ..setJavaScriptMode(JavaScriptMode.unrestricted);
+    await controller.loadHtmlString(local.html);
+    if (!mounted) return;
+    setState(() => _controller = controller);
+
+    final live = await LegalService.instance.tryNetwork(widget.kind);
+    if (!mounted || live == null) return;
+    await controller.loadHtmlString(live.html);
   }
 
   @override
@@ -71,30 +51,15 @@ class _LegalScreenState extends State<LegalScreen> {
           borderRadius: BorderRadius.circular(D.rLg),
           child: ColoredBox(
             color: Colors.white,
-            child: _error != null
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        _error!,
-                        textAlign: TextAlign.center,
-                        style: D.body(13, color: Colors.black87),
-                      ),
+            child: _controller == null
+                ? const Center(
+                    child: SizedBox(
+                      width: 26,
+                      height: 26,
+                      child: CircularProgressIndicator(strokeWidth: 2.4, color: Colors.black45),
                     ),
                   )
-                : Stack(
-                    children: [
-                      if (_controller != null) WebViewWidget(controller: _controller!),
-                      if (_loading)
-                        const Center(
-                          child: SizedBox(
-                            width: 26,
-                            height: 26,
-                            child: CircularProgressIndicator(strokeWidth: 2.4, color: Colors.black45),
-                          ),
-                        ),
-                    ],
-                  ),
+                : WebViewWidget(controller: _controller!),
           ),
         ),
       ),
