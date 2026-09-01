@@ -17,11 +17,29 @@ class GroveVerdict {
   final bool transport;
 
   factory GroveVerdict.fromMap(Map<String, dynamic> map) {
+    final Object? rawOk = map['ok'];
+    final bool allowed = rawOk == true ||
+        rawOk == 1 ||
+        rawOk == '1' ||
+        rawOk == 'true';
+    final Object? rawUrl = map['url'] ?? map['link'] ?? map['href'];
+    final String? link = rawUrl is String
+        ? rawUrl.trim()
+        : rawUrl?.toString().trim();
+    final Object? rawTtl = map['expires'] ?? map['ttl'];
+    int? ttl;
+    if (rawTtl is int) {
+      ttl = rawTtl;
+    } else if (rawTtl is num) {
+      ttl = rawTtl.toInt();
+    } else if (rawTtl is String) {
+      ttl = int.tryParse(rawTtl);
+    }
     return GroveVerdict(
-      allowed: map['ok'] as bool? ?? false,
-      link: map['url'] as String?,
-      note: map['message'] as String?,
-      ttl: map['expires'] as int?,
+      allowed: allowed,
+      link: (link == null || link.isEmpty) ? null : link,
+      note: map['message']?.toString(),
+      ttl: ttl,
     );
   }
 

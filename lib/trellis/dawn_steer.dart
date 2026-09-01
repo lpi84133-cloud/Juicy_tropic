@@ -110,10 +110,6 @@ class DawnSteer {
     final bool haveCache = cached != null && GroveMark.isWebLink(cached);
 
     await scent.ignite();
-    if (!await dew.pathLive()) {
-      if (haveCache) return JuicePick(cached);
-      return const DryPick();
-    }
     fill(0.60);
     if (!haveCache) {
       await scent.waitSignals(installSeconds: GroveMark.backSignalSec);
