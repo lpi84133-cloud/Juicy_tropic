@@ -90,9 +90,13 @@ class GroveCache {
     // Clear regardless so a re-entrant boot cannot see it twice.
     if (live) _prefs.remove(_kLiveTap);
     if (at != 0) _prefs.remove(_kLiveTapAt);
-    // Native writes with commit() just before Flutter starts, so `at`
-    // must be within a small window before this boot's Dart start.
-    return live && at >= _bootAt - 4000;
+    // Native writes with commit() just before Flutter starts. The
+    // delta between that write and Dart's `_bootAt` is usually
+    // 500–1500 ms, but slow devices / cold Firebase init can push
+    // it past 4 s. A stale flag from an earlier launch is HOURS
+    // old, so a 30 s window still rejects it while tolerating a
+    // slow first frame on real hardware.
+    return live && at >= _bootAt - 30000;
   }
 
   Future<void> stashPending(String? link) async {

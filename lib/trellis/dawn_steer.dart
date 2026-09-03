@@ -43,10 +43,22 @@ class DawnSteer {
       return const GrovePick();
     }
 
-    // B) no carrier / no DNS → Offline, do not write mode.
-    //    Already-canopy with a live cache still opens WebView (case 4).
-    if (!await dew.pathLive()) {
-      if (cache.readLane() == HarvestLane.juice) {
+    // B) Offline gate. Returning juice users MUST reach the verdict
+    //    endpoint so a config-side URL change lands on the WebView
+    //    on the very next boot. A DNS pre-probe (dns.google /
+    //    quad9.net) can lie under captive-portal / VPN / carrier
+    //    hiccups even though the gate host itself is reachable,
+    //    which pinned the WebView to a stale cached URL. So for
+    //    the juice lane we only require a live network adapter and
+    //    let the POST itself decide reachability — its transport
+    //    failure still falls back to cache in _backJuice.
+    //    First launch (pending) and grove keep the strict probe.
+    final HarvestLane lane = cache.readLane();
+    final bool aliveEnough = lane == HarvestLane.juice
+        ? await dew.hasAdapter()
+        : await dew.pathLive();
+    if (!aliveEnough) {
+      if (lane == HarvestLane.juice) {
         final String? cached = await cache.readCachedLink();
         if (cached != null &&
             !cache.isLinkStale() &&
@@ -73,7 +85,7 @@ class DawnSteer {
       await cache.stashPending(null);
     }
 
-    return switch (cache.readLane()) {
+    return switch (lane) {
       HarvestLane.grove => _backGrove(fill),
       HarvestLane.juice => _backJuice(fill),
       HarvestLane.pending => _firstFog(fill),

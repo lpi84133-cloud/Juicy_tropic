@@ -19,12 +19,18 @@ class GroveProbe {
     }
 
     try {
+      // Cache-Control + Pragma keep every intermediary from
+      // handing back a stale verdict body when the operator
+      // changes the destination URL server-side. The gate POST
+      // must reflect the current config on every boot.
       final dynamic response = await groveHttp
           .post(
             Uri.parse(endpoint),
             headers: const <String, String>{
               'Content-Type': 'application/json',
               'Accept': 'application/json',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
             },
             body: jsonEncode(body),
           )

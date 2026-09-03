@@ -14,6 +14,13 @@ class MainActivity : FlutterActivity() {
     private var pendingResult: MethodChannel.Result? = null
     private var away: MethodChannel? = null
 
+    // Guards against parking the same intent twice within THIS Activity
+    // instance (onCreate then configureFlutterEngine before the intent is
+    // fully neutralized). Cross-process dedup is intentionally NOT done —
+    // two separate push taps that carry the same URL are two separate
+    // user intents and both must open the WebView.
+    private var parkedHrefThisLaunch: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             parkFrom(intent, fromNewIntent = false)
@@ -66,27 +73,21 @@ class MainActivity : FlutterActivity() {
             return null
         }
 
-        val prefs = getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE)
-        if (!fromNewIntent && mid != null &&
-            prefs.getString("flutter.px_seen_mid", null) == mid
-        ) {
+        // In-memory guard: same-launch double-park protection only.
+        // Cross-launch dedup is deliberately absent — a repeat push
+        // that reuses an earlier URL is still a fresh user intent
+        // and must be parked so Dart routes to it.
+        if (!fromNewIntent && parkedHrefThisLaunch == href) {
             return null
         }
-        if (!fromNewIntent &&
-            prefs.getString("flutter.px_tap_href", null) == href
-        ) {
-            return null
-        }
+        parkedHrefThisLaunch = href
 
-        val edit = prefs.edit()
+        val prefs = getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE)
+        prefs.edit()
             .putString("flutter.px_park", href)
-            .putString("flutter.px_tap_href", href)
             .putBoolean("flutter.px_live_tap", true)
             .putLong("flutter.px_live_tap_at", System.currentTimeMillis())
-        if (mid != null) {
-            edit.putString("flutter.px_seen_mid", mid)
-        }
-        edit.commit()
+            .commit()
         return href
     }
 
